@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EscrowX - Secure Escrow</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
+
+header {
+    background: #111827;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #4ade80;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.hero {
+    background: linear-gradient(135deg,#111827,#1f2937);
+    color: white;
+    padding: 75px 6%;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
+
+.hero p {
+    font-size: 18px;
+    color: #d1d5db;
+    max-width: 650px;
+    margin: auto;
+}
+
+.btn {
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.primary {
+    background: #22c55e;
+    color: white;
+}
+
+.secondary {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.danger {
+    background: #ef4444;
+    color: white;
+}
+
+.hero .btn {
+    margin-top: 25px;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 0 20px;
+}
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 3px 15px rgba(0,0,0,.07);
+}
+
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.balance {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.section-title {
+    margin: 40px 0 18px;
+}
+
+.form {
+    display: grid;
+    gap: 15px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 90px;
+}
+
+.transactions {
+    display: grid;
+    gap: 15px;
+}
+
+.transaction {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    border-left: 5px solid #22c55e;
+}
+
+.transaction h3 {
+    margin-bottom: 8px;
+}
+
+.status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 13px;
+    margin: 8px 0;
+}
+
+.actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+footer {
+    margin-top: 60px;
+    background: #111827;
+    color: #aaa;
+    text-align: center;
+    padding: 30px;
+}
+
+@media(max-width:700px) {
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 32px;
+    }
+
+    nav {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Escrow<span>X</span></div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#transactions">Transactions</a>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h1>Secure Transactions With Escrow</h1>
+    <p>
+        Protect buyers and sellers by keeping funds secure until
+        agreed conditions are completed.
+    </p>
+    <button class="btn primary" onclick="openModal()">
+        Create Transaction
+    </button>
+</section>
+
+<div class="container" id="dashboard">
+
+    <h2 class="section-title">Dashboard</h2>
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h3>Available Balance</h3>
+            <div class="balance" id="balance">$0.00</div>
+        </div>
+
+        <div class="card">
+            <h3>In Escrow</h3>
+            <div class="balance" id="escrow">$0.00</div>
+        </div>
+
+        <div class="card">
+            <h3>Transactions</h3>
+            <div class="balance" id="transactionCount">0</div>
+        </div>
+
+    </div>
+
+    <h2 class="section-title" id="transactions">
+        My Transactions
+    </h2>
+
+    <div class="transactions" id="transactionList"></div>
+
+</div>
+
+<!-- CREATE TRANSACTION MODAL -->
+
+<div class="modal" id="modal">
+
+    <div class="modal-content">
+
+        <span class="close" onclick="closeModal()">×</span>
+
+        <h2>Create Escrow Transaction</h2>
+
+        <br>
+
+        <form class="form" onsubmit="createTransaction(event)">
+
+            <input
+                type="text"
+                id="title"
+                placeholder="Transaction title"
+                required
+            >
+
+            <input
+                type="text"
+                id="seller"
+                placeholder="Seller name or email"
+                required
+            >
+
+            <input
+                type="number"
+                id="amount"
+                placeholder="Amount"
+                min="1"
+                step="0.01"
+                required
+            >
+
+            <select id="currency">
+                <option value="USD">USD</option>
+                <option value="KES">KES</option>
+                <option value="EUR">EUR</option>
+                <option value="GBP">GBP</option>
+            </select>
+
+            <textarea
+                id="description"
+                placeholder="Describe the agreement..."
+                required
+            ></textarea>
+
+            <button class="btn primary" type="submit">
+                Create Escrow
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 EscrowX. Secure digital transactions.</p>
+    <p style="margin-top:8px;">
+        Demo platform — no real funds are held.
+    </p>
+</footer>
+
+<script>
+
+let transactions =
+    JSON.parse(localStorage.getItem("escrowTransactions")) || [];
+
+let balance =
+    Number(localStorage.getItem("escrowBalance")) || 0;
+
+function saveData() {
+    localStorage.setItem(
+        "escrowTransactions",
+        JSON.stringify(transactions)
+    );
+
+    localStorage.setItem(
+        "escrowBalance",
+        balance
+    );
+}
+
+function openModal() {
+    document.getElementById("modal").style.display = "flex";
+}
+
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+function createTransaction(event) {
+
+    event.preventDefault();
+
+    const title =
+        document.getElementById("title").value;
+
+    const seller =
+        document.getElementById("seller").value;
+
+    const amount =
+        Number(document.getElementById("amount").value);
+
+    const currency =
+        document.getElementById("currency").value;
+
+    const description =
+        document.getElementById("description").value;
+
+    const transaction = {
+
+        id:
+            "ESC-" +
+            Date.now(),
+
+        title: title,
+
+        seller: seller,
+
+        amount: amount,
+
+        currency: currency,
+
+        description: description,
+
+        status: "Created",
+
+        date:
+            new Date().toLocaleString()
+
+    };
+
+    transactions.unshift(transaction);
+
+    saveData();
+
+    document.querySelector(".form").reset();
+
+    closeModal();
+
+    renderTransactions();
+}
+
+function renderTransactions() {
+
+    const list =
+        document.getElementById("transactionList");
+
+    list.innerHTML = "";
+
+    if (transactions.length === 0) {
+
+        list.innerHTML = `
+            <div class="card">
+                <p>No transactions yet.</p>
+            </div>
+        `;
+
+        updateDashboard();
+
+        return;
+    }
+
+    transactions.forEach((t,index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "transaction";
+
+        div.innerHTML = `
+
+            <h3>${escapeHTML(t.title)}</h3>
+
+            <p>
+                <strong>ID:</strong>
+                ${t.id}
+            </p>
+
+            <p>
+                <strong>Seller:</strong>
+                ${escapeHTML(t.seller)}
+            </p>
+
+            <p>
+                <strong>Amount:</strong>
+                ${t.currency}
+                ${t.amount.toFixed(2)}
+            </p>
+
+            <p>
+                ${escapeHTML(t.description)}
+            </p>
+
+            <span class="status">
+                ${t.status}
+            </span>
+
+            <p>
+                <small>${t.date}</small>
+            </p>
+
+            <div class="actions">
+
+                ${
+                    t.status === "Created"
+                    ?
+                    `<button
+                        class="btn primary"
+                        onclick="fundTransaction(${index})">
+                        Fund Escrow
+                    </button>`
+                    : ""
+                }
+
+                ${
+                    t.status === "Funded"
+                    ?
+                    `<button
+                        class="btn primary"
+                        onclick="releaseFunds(${index})">
+                        Release Funds
+                    </button>`
+                    : ""
+                }
+
+                ${
+                    t.status === "Funded"
+                    ?
+                    `<button
+                        class="btn danger"
+                        onclick="openDispute(${index})">
+                        Open Dispute
+                    </button>`
+                    : ""
+                }
+
+                ${
+                    t.status === "Created"
+                    ?
+                    `<button
+                        class="btn danger"
+                        onclick="deleteTransaction(${index})">
+                        Cancel
+                    </button>`
+                    : ""
+                }
+
+            </div>
+        `;
+
+        list.appendChild(div);
+
+    });
+
+    updateDashboard();
+}
+
+function fundTransaction(index) {
+
+    const transaction =
+        transactions[index];
+
+    if (
+        !confirm(
+            "Fund this escrow transaction?"
+        )
+    ) {
+        return;
+    }
+
+    transaction.status = "Funded";
+
+    balance -= transaction.amount;
+
+    saveData();
+
+    renderTransactions();
+
+    alert(
+        "Escrow funded successfully."
+    );
+}
+
+function releaseFunds(index) {
+
+    if (
+        !confirm(
+            "Release the escrow funds to the seller?"
+        )
+    ) {
+        return;
+    }
+
+    transactions[index].status =
+        "Completed";
+
+    saveData();
+
+    renderTransactions();
+
+    alert(
+        "Transaction completed."
+    );
+}
+
+function openDispute(index) {
+
+    if (
+        !confirm(
+            "Open a dispute for this transaction?"
+        )
+    ) {
+        return;
+    }
+
+    transactions[index].status =
+        "Disputed";
+
+    saveData();
+
+    renderTransactions();
+
+    alert(
+        "Dispute opened. Review is required."
+    );
+}
+
+function deleteTransaction(index) {
+
+    if (
+        !confirm(
+            "Cancel this transaction?"
+        )
+    ) {
+        return;
+    }
+
+    transactions.splice(index,1);
+
+    saveData();
+
+    renderTransactions();
+}
+
+function updateDashboard() {
+
+    document.getElementById("balance")
+        .textContent =
+        "$" + balance.toFixed(2);
+
+    let escrowTotal = 0;
+
+    transactions.forEach(t => {
+
+        if (t.status === "Funded") {
+            escrowTotal += t.amount;
+        }
+
+    });
+
+    document.getElementById("escrow")
+        .textContent =
+        "$" + escrowTotal.toFixed(2);
+
+    document.getElementById("transactionCount")
+        .textContent =
+        transactions.length;
+}
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+renderTransactions();
+
+</script>
+
+</body>
+  </html>
