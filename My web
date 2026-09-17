@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+  <div class="logo">TaskHub</div>
+
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Marketplace</a>
+    <a href="#">Earnings</a>
+    <a href="#">Missions</a>
+    <a href="#">Quality</a>
+    <a href="#">Playground</a>
+  </nav>
+
+  <div class="nav-icons">
+    <span>▦</span>
+    <span>♧</span>
+    <div class="avatar-small">AS</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Notice -->
+  <section class="notice">
+    <div class="notice-icon">🏦</div>
+    <div>
+      <strong>Payment Setup Required</strong>
+      <p>
+        Payment setup is required to continue tasking.
+        Add your account details and complete your payment setup.
+      </p>
+    </div>
+  </section>
+
+  <!-- Profile -->
+  <section class="profile">
+    <div class="avatar">AS</div>
+
+    <div>
+      <h1>Ahmed Shawky</h1>
+      <p>ahmedshawky2002@example.com</p>
+    </div>
+  </section>
+
+  <div class="project-heading">
+    <span>Current Project <b>1st in Queue</b></span>
+    <a href="#">Project Queue ›</a>
+  </div>
+
+  <!-- Project -->
+  <section class="project-card">
+
+    <div class="project-info">
+      <h2>Aether</h2>
+
+      <p>
+        Aether is built for contributors who like quick, simple tasks.
+        Look at a picture and describe it, spot differences between two
+        things, and follow straightforward instructions.
+      </p>
+
+      <div class="project-details">
+        <span>🟠 Payment Setup Required</span>
+        <span>💼 Generalist</span>
+        <span>👥 Open Project</span>
+      </div>
+
+      <div class="buttons">
+        <button class="primary">Set Up Payment</button>
+        <button class="secondary">Project Details</button>
+      </div>
+    </div>
+
+    <div class="rate">
+      <span>▣</span>
+      <strong>$7.50</strong> / hr
+    </div>
+
+  </section>
+
+  <!-- Cards -->
+  <section class="grid">
+
+    <div class="card">
+      <div class="card-title">
+        <span class="green-icon">▣</span>
+        Skills
+      </div>
+
+      <div class="illustration">♧</div>
+
+      <p>
+        Get started by browsing available skills and unlock more projects.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="purple-icon">▣</span>
+        Earnings
+      </div>
+
+      <h2>Track your earnings</h2>
+
+      <p>
+        As you start tasking on projects, you'll see how much you've earned
+        so far, making it easy to track your progress.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="red-icon">AI</span>
+        AI Playground
+      </div>
+
+      <div class="streak">
+        <span>🔥</span>
+        <div>
+          <small>Current Streak</small>
+          <strong>0 Days</strong>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="streak">
+        <span>🔥</span>
+        <div>
+          <small>Highest Streak</small>
+          <strong>0 Days</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">
+        <span class="blue-icon">♙</span>
+        Task Community
+      </div>
+
+      <div class="people">♙ ♙ ♙ ♙ ♙</div>
+
+      <p>
+        Join the task community for discussions and connect with others.
+      </p>
+    </div>
+
+  </section>
+
+</main>
+
+<div class="chat">●</div>
+
+</body>
+</html>
